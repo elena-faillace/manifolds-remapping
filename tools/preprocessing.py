@@ -118,6 +118,10 @@ def add_movements_to_csv(animal, fov, experiment, run):
 
     # Load the dataframe to add the 'movement_status' and 'angular_speed' columns to
     df_spikes = load_csv_data(animal, fov, experiment, run)
+    # If the columns are already there, delete them
+    if ('angular_speed' in df_spikes.columns) or ('movement_status' in df_spikes.columns) or (
+        'glob_time' in df_spikes.columns):
+        df_spikes = df_spikes.drop(columns=['angular_speed', 'movement_status', 'glob_time'])
 
     # Get behavioural variables
     phi = df_spikes['phi'].values
