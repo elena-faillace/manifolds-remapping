@@ -1,0 +1,144 @@
+"""Functions to prepare the data for future analysis."""
+
+import numpy as np
+from scipy.ndimage import gaussian_filter1d
+
+from tools.data_manager import load_csv_data
+
+
+def get_smoothed_moving_spikes(animal, fov, experiment, run, bins_compress=3, sigma_smoothing=3, portion_to_remove=0.1):
+    """Function that pre-process the spikes from the experiments such that they are ready for further analysis. 
+    Need to test the parameters first in another notebook to make sure they are adequate to those recordings.
+    This function:
+    * Removes a first portion of the recordings.
+    * Bins the spikes.
+    * Convolutes the spikes with a gaussian kernel.
+    * Square roots the firing rates.
+    * Removes the stationary points.
+    INPUTS: 
+    - animal,fov,experiment,run: list of dictionaries with the information of the experiments to be processed. 
+    - bins_compress: integer with the number of bins to compress the data.
+    - sigma_smoothing: float with the sigma for the gaussian kernel to smooth the data.
+    - portion_to_remove: float with the portion of the data to remove from the beginning of the recordings. 
+    OUTPUTS:
+    - sel_firing_rates: list of dataframes with the firing rates of the experiments pre-processed, the columns are the cells idxs.
+    - sel_time: list of numpy arrays with the time of the experiments pre-processed.
+    - sel_phi: list of numpy arrays with the phi of the experiments pre-processed.
+    - cells: list of strings with the idxs of the cells.
+    """
+    # Load the data
+    df_orig = load_csv_data(animal, fov, experiment, run)
+    time = df_orig['time'].values
+    phi = df_orig['phi'].values
+    moving_masks = df_orig['movement_status'].values=='moving'
+    cells = df_orig.columns[df_orig.columns.str.contains(r'^\d', regex=True)]
+    spikes = df_orig[cells].values
+    # Remove the first portion of the recordings
+    spikes = spikes[int(len(spikes)*portion_to_remove):,:]
+    time = time[int(len(time)*portion_to_remove):]
+    phi = phi[int(len(phi)*portion_to_remove):]
+    moving_masks = moving_masks[int(len(moving_masks)*portion_to_remove):]
+    # Bin the dataset
+    n_bins = spikes.shape[0]//bins_compress
+    spikes_b = np.sum(spikes[:n_bins*bins_compress].reshape(-1, bins_compress, spikes.shape[1]), axis=1)
+    time_b = np.mean(time[:n_bins*bins_compress].reshape(-1, bins_compress), axis=1)
+    phi_b = np.mean(phi[:n_bins*bins_compress].reshape(-1, bins_compress), axis=1)
+    moving_masks_b = np.sum(moving_masks[:n_bins*bins_compress].reshape(-1, bins_compress), axis=1)>0
+    # Convolute with a Gaussian kernel
+    firing_rates = get_firing_rates(spikes_b.T,sigma=sigma_smoothing).T
+    # Square root the firing rates
+    firing_rates = np.sqrt(firing_rates)
+    # Remove the stationary points
+    sel_firing_rates = firing_rates[moving_masks_b,:]
+    sel_time = time_b[moving_masks_b]
+    sel_phi = phi_b[moving_masks_b]
+    return sel_firing_rates, sel_time, sel_phi, cells
+
+def get_firing_rates(events, sigma):
+    """Return firing rates from events trains. It might return less neurons if NaN values are present.
+    INPUTS:
+    - events = events trains of the neurons (neurons x timepoints)
+    - sigma = sigma of the gaussian filter (default: 6.2 for 30.9Hz from literature)
+    """
+
+    # Remove rows (neurons) with NaN values
+    #sel_eve = events[~(np.sum(np.isnan(events), axis=1)>0)]
+    # Apply gaussian filter along one axis
+    frates = gaussian_filter1d(events, sigma=sigma, axis=1)
+    return frates
+
+def get_smoothed_moving_all_data(animal, fov, experiment, run, n_points=360):
+    """Load the data that has been binned and smoothed.
+    INPUTS:
+    - animal, fov, experiment, run: strings, names of the data to load
+    - n_components: number of components to keep from the PCA of the average manifold ring (if -1 use all)
+    - n_points: number of points to use for the average manifold ring
+    OUTPUTS:
+    firing_rates, time, phi, cells, average_firing_rates, phi_bins
+    """
+    # Load the data binned and smoothed
+    firing_rates, time, phi, cells = get_smoothed_moving_spikes(animal, fov, experiment, run)
+    # Remove time-points where phi is nan
+    firing_rates = firing_rates[~np.isnan(phi)]
+    time = time[~np.isnan(phi)]
+    phi = phi[~np.isnan(phi)]
+    # Load the tuning curves
+    average_firing_rates, phi_bins = get_tuning_curves(firing_rates, phi, n_points=n_points)
+    return firing_rates, time, phi, cells, average_firing_rates, phi_bins
+
+def get_tuning_curves(firing_rates, phi, n_points):
+    """Find the tunign curves manifold given the numnber of bins to keep.
+    INPUTS: 
+    - firing_rates: 2D array of shape (time-samples, neurons)
+    - phi: 1D array of shape (time-samples)
+    - n_points: number of points in the ring
+    OUTPUTS:
+    - ring_neural: 2D array of shape (n_points, neurons)
+    """
+
+    # To be sure the angles are within 360
+    phi_mod = phi % 360
+    dphi = 360/n_points
+    bin_idx = np.floor(phi_mod / dphi).astype(int)
+    # To be used to store the average firing rates and track the number of samples in each bin
+    ring_neural = np.zeros((n_points, firing_rates.shape[1]))
+    counts = np.zeros(n_points, dtype=int)
+    for i in range(len(phi_mod)):
+        ring_neural[bin_idx[i], :] += firing_rates[i]
+        counts[bin_idx[i]] += 1
+    for b in range(n_points):
+        if counts[b] > 0:
+            ring_neural[b, :] /= counts[b]
+        else:
+            ring_neural[b, :] = np.nan
+    # Define angles associated to each bin
+    points_phi = np.arange(n_points) * dphi
+
+    if np.isnan(ring_neural).any():
+        print("Warning: Some bins are empty; returning NaN for those bins.")
+    return ring_neural, points_phi
+
+def get_common_indexes_2recordings(cells_run1, cells_run2):
+    """
+    Given two lists with the cells indexes find a common order.
+    Return the cells in common and the order they need to be selected. 
+    First remove the not common cells and then order them.
+    TODO: should generalise to more than 2 recordings.
+    OUTPUTS:
+    - sel_cells_run1: bool array for the cells in run1 to keep
+    - sel_cells_run2: bool array for the cells in run2 to keep
+    - ordered_cells_run1: ordered indexes for run1
+    - ordered_cells_run2: ordered indexes for run2
+    """
+    # Sort the cells
+    # Select only common cells
+    common_cells = np.intersect1d(cells_run1, cells_run2)
+    c_cells_run1_mask = np.isin(cells_run1, common_cells)
+    c_cells_run2_mask = np.isin(cells_run2, common_cells)
+    c_cells_run1 = cells_run1[c_cells_run1_mask]
+    c_cells_run2 = cells_run2[c_cells_run2_mask]
+    # Order the cells
+    ordered_cells_run1 = np.argsort([int(c) for c in c_cells_run1])
+    ordered_cells_run2 = np.argsort([int(c) for c in c_cells_run2])
+
+    return c_cells_run1_mask, c_cells_run2_mask, ordered_cells_run1, ordered_cells_run2

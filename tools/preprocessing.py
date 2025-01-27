@@ -111,10 +111,12 @@ def get_rois_to_exclude(animal, fov, experiment, run):
 
 def add_movements_to_csv(animal, fov, experiment, run):
     """Add the 'movement_status' and 'angular_speed' columns to the dataframe. Add also the golbal time."""
-    path_to_csv_spikes = find_path_to_csv(animal, fov, experiment, run)
-
+    window = 10 # number of points to average the angular speed
+    moving_threshold = 20 #cm/s
     tollerance_time = 0.1 # (seconds) the time the animal can be stationary before it is considered stationary (and viceversa)
     tollerance_window = np.ceil(tollerance_time*sampling_freq)
+
+    path_to_csv_spikes = find_path_to_csv(animal, fov, experiment, run)
 
     # Load the dataframe to add the 'movement_status' and 'angular_speed' columns to
     df_spikes = load_csv_data(animal, fov, experiment, run)
@@ -135,14 +137,12 @@ def add_movements_to_csv(animal, fov, experiment, run):
     for trial_start in trial_starts:
         angular_speed[trial_start] = (angular_speed[trial_start+1]+angular_speed[trial_start-1])/2
     # apply a moving average to the angular speed
-    window = 10
     for i in range(len(angular_speed)-window):
         angular_speed[i] = np.mean(angular_speed[i:i+window])
     # Insert a column in the dataframe after 'speed'
     df_spikes.insert(df_spikes.columns.get_loc('speed')+1, 'angular_speed', angular_speed)
 
     # Get a status of 'moving' vs 'stationary'
-    moving_threshold = 20 #cm/s
     stationary = np.abs(speed) < moving_threshold
     movement_status = np.array(['moving']*len(speed), dtype='U10')
     movement_status[stationary] = 'stationary'
