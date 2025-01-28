@@ -1,4 +1,4 @@
-"""This module contains functions to load data from the data folder."""
+"""This module contains functions to load data from the data folder, or handle paths."""
 
 import os
 os.sys.path.append(os.pardir)
@@ -46,4 +46,14 @@ def load_csv_data(animal, fov, experiment, run):
     except FileNotFoundError: 
         print('File not found: ' + path_to_csv)
     return df
+
+
+def get_all_experiments_runs(animal, fov):
+    """
+    Get all the experiments-sessions for a given animal and fov. 
+    Return a list of tuples (experiment, run).
+    """
+    res = glob.glob(f'{root_dir}data/**/{animal}/{animal}_{fov}*', recursive=True)
+    all_sessions = [tuple(res[i].split(f'{animal}_{fov}_')[1].split('-')) for i in range(len(res))]
+    return all_sessions
 
