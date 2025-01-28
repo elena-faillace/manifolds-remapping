@@ -13,7 +13,7 @@ Use prepare_data.ipynb to use the files available from Ann's recording:
 1. combine the data in `_downTrackdata.mat` with the spikes in `_spikes.mat`, to create a .csv file `_spikes.csv`.
 2. add to the .csv file the information on *angular_speed*, *global_time* and *movement_status*.
 
-## Figures
+## Figures
 
 - `fig1.ipynb`: plots regarding the experiment setup and the presentation of the problem of *remapping*.
     - :white_large_square: a. 

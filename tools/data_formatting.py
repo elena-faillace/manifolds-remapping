@@ -142,3 +142,21 @@ def get_common_indexes_2recordings(cells_run1, cells_run2):
     ordered_cells_run2 = np.argsort([int(c) for c in c_cells_run2])
 
     return c_cells_run1_mask, c_cells_run2_mask, ordered_cells_run1, ordered_cells_run2
+
+def smooth_tuning_curves_circularly(tuning_curves, kernel_size):
+    """
+    Given an array of tuning curves smooth them circularly. 
+    Use moving average such that the beginning and ending of the array are connected.
+    INPUTS:
+    - tuning_curves: 2D array of shape (n_points, n_neurons)
+    - smooth_kernel: int with the size of the kernel to smooth
+    OUTPUTS:
+    - smoothed_tuning_curves: 2D array of shape (n_points, n_neurons)
+    """
+    kernel = np.ones((kernel_size,))/kernel_size
+    pad_width = len(kernel) - 1
+    smoothed_tuning_curves = []
+    for i in range(tuning_curves.shape[1]):
+        padded_array = np.pad(tuning_curves[:, i], pad_width=((pad_width,),), mode='wrap')
+        smoothed_tuning_curves.append(np.convolve(padded_array, kernel, mode='valid')[:len(tuning_curves[:,i])])
+    return np.array(smoothed_tuning_curves).T
