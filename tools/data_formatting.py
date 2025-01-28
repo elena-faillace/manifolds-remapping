@@ -130,7 +130,6 @@ def get_common_indexes_2recordings(cells_run1, cells_run2):
     - ordered_cells_run1: ordered indexes for run1
     - ordered_cells_run2: ordered indexes for run2
     """
-    # Sort the cells
     # Select only common cells
     common_cells = np.intersect1d(cells_run1, cells_run2)
     c_cells_run1_mask = np.isin(cells_run1, common_cells)
@@ -142,6 +141,28 @@ def get_common_indexes_2recordings(cells_run1, cells_run2):
     ordered_cells_run2 = np.argsort([int(c) for c in c_cells_run2])
 
     return c_cells_run1_mask, c_cells_run2_mask, ordered_cells_run1, ordered_cells_run2
+
+def get_common_indexes_n_recordings(cells_list):
+    """
+    Given a list of list of cells indexes find a common order.
+    Return the cells in common and the order they need to be selected. 
+    First remove the not-common cells and then order them.
+    OUTPUTS:
+    - sel_cells_list: list of bool arrays for the cells in the list to keep
+    - ordered_cells_list: list of ordered indexes for the list
+    """
+    # Select common cells
+    common_cells = list(set(cells_list[0]).intersection(*cells_list[1:]))
+    sel_cells_list = []
+    ordered_cells_list = []
+    for cells in cells_list:
+        c_cells_mask = np.isin(cells, common_cells)
+        c_cells = cells[c_cells_mask]
+        # Order the cells
+        ordered_cells = np.argsort([int(c) for c in c_cells])
+        sel_cells_list.append(c_cells_mask)
+        ordered_cells_list.append(ordered_cells)
+    return sel_cells_list, ordered_cells_list
 
 def smooth_tuning_curves_circularly(tuning_curves, kernel_size):
     """

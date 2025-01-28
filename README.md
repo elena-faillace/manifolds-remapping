@@ -16,12 +16,12 @@ Use prepare_data.ipynb to use the files available from Ann's recording:
 ## Figures
 
 - `fig1.ipynb`: plots regarding the experiment setup and the presentation of the problem of *remapping*.
-    - :white_large_square: a. 
+    - :white_check_mark: a. Given an animal+fov I plotted the tuning curves embedding pre and post alignment (taking only the common neurons)
     - :white_large_square: b.
     - :white_large_square: c. 
     - :white_large_square: d. 
     - :white_large_square: e.
-    - :white_check_mark: f.
+    - :white_large_square: f. Shoudl generalised to all the recordings of an animal+fov together
 
 - `fig2.ipynb`: plots with main results, presentation of the model and usage to decode position across sessions.
 
