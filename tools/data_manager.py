@@ -57,3 +57,8 @@ def get_all_experiments_runs(animal, fov):
     all_sessions = [tuple(res[i].split(f'{animal}_{fov}_')[1].split('-')) for i in range(len(res))]
     return all_sessions
 
+def get_fovs_given_animal(animal):
+    """Get the fovs for a given animal."""
+    res = glob.glob(f'{root_dir}data/*/{animal}/*', recursive=True)
+    fovs = np.unique([res[i].split('/')[-1].split('_')[1] for i in range(len(res))])
+    return fovs
