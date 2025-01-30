@@ -98,7 +98,16 @@ def get_smoothed_moving_all_data(animal, fov, experiment, run, n_points=360, por
     phi = phi[~np.isnan(phi)]
     # Load the tuning curves
     average_firing_rates, phi_bins = get_tuning_curves(firing_rates, phi, n_points=n_points)
-    return firing_rates, time, phi, cells, average_firing_rates, phi_bins
+    # Unwrap the time
+    tdiff = np.diff(time)
+    time_unwrapped = np.zeros(len(time))
+    time_unwrapped[0] = time[0]
+    for i in range(1, len(time_unwrapped)):
+        if tdiff[i-1] > 0:
+            time_unwrapped[i] = time_unwrapped[i-1] + tdiff[i-1]
+        else:
+            time_unwrapped[i] = time_unwrapped[i-1] + time[i]
+    return firing_rates, time_unwrapped, phi, cells, average_firing_rates, phi_bins
 
 def get_tuning_curves(firing_rates, phi, n_points):
     """Find the tunign curves manifold given the numnber of bins to keep.
@@ -144,6 +153,7 @@ def get_tuning_curves(firing_rates, phi, n_points):
 
     return ring_neural, points_phi
 
+# TODO: delete this
 def get_common_indexes_2recordings(cells_run1, cells_run2):
     """
     Given two lists with the cells indexes find a common order.
