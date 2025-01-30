@@ -111,6 +111,11 @@ def get_tuning_curves(firing_rates, phi, n_points):
             ring_neural[b, :] /= counts[b]
         else:
             ring_neural[b, :] = np.nan
+    # If there are NaN values interpolate them with nearest values
+    # TODO: check
+    for i in range(ring_neural.shape[1]):
+        nans, x = np.isnan(ring_neural[:, i]), lambda z: z.nonzero()[0]
+        ring_neural[nans, i] = np.interp(x(nans), x(~nans), ring_neural[~nans, i])
     # Define angles associated to each bin
     points_phi = np.arange(n_points) * dphi
 
