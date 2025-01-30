@@ -6,7 +6,7 @@ from scipy.ndimage import gaussian_filter1d
 from tools.data_manager import load_csv_data
 
 
-def get_smoothed_moving_spikes(animal, fov, experiment, run, bins_compress=3, sigma_smoothing=3, portion_to_remove=0.1):
+def get_smoothed_moving_spikes(animal, fov, experiment, run, bins_compress=3, sigma_smoothing=3, portion_to_remove=0.0):
     """Function that pre-process the spikes from the experiments such that they are ready for further analysis. 
     Need to test the parameters first in another notebook to make sure they are adequate to those recordings.
     This function:
@@ -38,6 +38,20 @@ def get_smoothed_moving_spikes(animal, fov, experiment, run, bins_compress=3, si
     time = time[int(len(time)*portion_to_remove):]
     phi = phi[int(len(phi)*portion_to_remove):]
     moving_masks = moving_masks[int(len(moving_masks)*portion_to_remove):]
+    # If there are nans in the spikes, remove the neurons and time points (choose the right order)
+    while np.isnan(spikes).any().sum() > 0:
+        if np.isnan(spikes).any(axis=0).sum() == spikes.shape[1]:
+            # Remove time-points first
+            print(f'WARNING: Removing time-points with NaN values from {animal}_{fov}_{experiment}-{run}: from {spikes.shape[0]} to {np.sum(~np.isnan(spikes).any(axis=1))}')
+            time = time[~np.isnan(spikes).any(axis=1)]
+            phi = phi[~np.isnan(spikes).any(axis=1)]
+            moving_masks = moving_masks[~np.isnan(spikes).any(axis=1)]
+            spikes = spikes[~np.isnan(spikes).any(axis=1),:]
+        if np.isnan(spikes).any(axis=1).sum() == spikes.shape[0]:
+            # Remove neurons first
+            print(f'WARNING: Removing neurons with NaN values from {animal}_{fov}_{experiment}-{run}: from {spikes.shape[1]} to {np.sum(~np.isnan(spikes).any(axis=0))}')
+            cells = cells[~np.isnan(spikes).any(axis=0)]
+            spikes = spikes[:,~np.isnan(spikes).any(axis=0)]
     # Bin the dataset
     n_bins = spikes.shape[0]//bins_compress
     spikes_b = np.sum(spikes[:n_bins*bins_compress].reshape(-1, bins_compress, spikes.shape[1]), axis=1)
@@ -67,7 +81,7 @@ def get_firing_rates(events, sigma):
     frates = gaussian_filter1d(events, sigma=sigma, axis=1)
     return frates
 
-def get_smoothed_moving_all_data(animal, fov, experiment, run, n_points=360):
+def get_smoothed_moving_all_data(animal, fov, experiment, run, n_points=360, portion_to_remove=0.0):
     """Load the data that has been binned and smoothed.
     INPUTS:
     - animal, fov, experiment, run: strings, names of the data to load
@@ -77,7 +91,7 @@ def get_smoothed_moving_all_data(animal, fov, experiment, run, n_points=360):
     firing_rates, time, phi, cells, average_firing_rates, phi_bins
     """
     # Load the data binned and smoothed
-    firing_rates, time, phi, cells = get_smoothed_moving_spikes(animal, fov, experiment, run)
+    firing_rates, time, phi, cells = get_smoothed_moving_spikes(animal, fov, experiment, run, portion_to_remove=portion_to_remove)
     # Remove time-points where phi is nan
     firing_rates = firing_rates[~np.isnan(phi)]
     time = time[~np.isnan(phi)]
@@ -95,6 +109,8 @@ def get_tuning_curves(firing_rates, phi, n_points):
     OUTPUTS:
     - ring_neural: 2D array of shape (n_points, neurons)
     """
+    if np.isnan(phi).any().sum() > 0:
+        print("Warning: Some angles are NaN")
 
     # To be sure the angles are within 360
     phi_mod = phi % 360
@@ -110,17 +126,22 @@ def get_tuning_curves(firing_rates, phi, n_points):
         if counts[b] > 0:
             ring_neural[b, :] /= counts[b]
         else:
-            ring_neural[b, :] = np.nan
-    # If there are NaN values interpolate them with nearest values
-    # TODO: check
-    for i in range(ring_neural.shape[1]):
-        nans, x = np.isnan(ring_neural[:, i]), lambda z: z.nonzero()[0]
-        ring_neural[nans, i] = np.interp(x(nans), x(~nans), ring_neural[~nans, i])
+            ring_neural[b, :] = 0
     # Define angles associated to each bin
     points_phi = np.arange(n_points) * dphi
 
     if np.isnan(ring_neural).any():
         print("Warning: Some bins are empty; returning NaN for those bins.")
+        for b in range(ring_neural.shape[0]):
+            if np.isnan(ring_neural[b, :]).any():
+                # Deal with nans at the beginning and ending of the ring
+                if b == 0:
+                    ring_neural[b, :] = (ring_neural[b+1, :] + ring_neural[-1, :])/2
+                elif b == ring_neural.shape[0]-1:
+                    ring_neural[b, :] = (ring_neural[b-1, :] + ring_neural[0, :])/2
+                else:
+                    ring_neural[b, :] = (ring_neural[b-1, :] + ring_neural[b+1, :])/2
+
     return ring_neural, points_phi
 
 def get_common_indexes_2recordings(cells_run1, cells_run2):
