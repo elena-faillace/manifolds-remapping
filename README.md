@@ -21,13 +21,17 @@ Use prepare_data.ipynb to use the files available from Ann's recording:
     - :white_large_square: c. 
     - :white_large_square: d. 
     - :white_large_square: e.
-    - :white_large_square: f. Shoudl generalised to all the recordings of an animal+fov together
+    - :white_large_square: f. Should generalised to all the recordings of an animal+fov together
 
 - `fig2.ipynb`: plots with main results, presentation of the model and usage to decode position across sessions.
     - :white_check_mark: a. Given an animal+fov I plotted the tuning curves embedding pre and post alignment (taking only the common neurons)
     - :white_large_square: b.
     - :white_large_square: c.
     - :white_large_square: d.
+
+- `fig3.ipynb`: control plots. Show the consistency of the model.
+    - :white_large_square: a. Predict firing rates across session given the aligned manifold.
+    - :white_large_square: b. 
 
 ## Other files
 
