@@ -16,6 +16,12 @@ Use prepare_data.ipynb to use the files available from Ann's recording:
 ## Figures
 
 - `fig1.ipynb`: plots regarding the experiment setup and the presentation of the problem of *remapping*.
+    - :white_large_square: a. schematic of microscope and environment's setup
+    - :white_large_square: b. Schematic of how two environments are different + summary of experiments structure (training + recordings)
+    - :white_large_square: c. Slice of HP to shoe the aread targetd + calcium traces example
+    - :white_large_square: d. Plot showing the behaviour of the mouse for 20 minutes of recordings
+    - :white_large_square: e. Example of cells remapping (events over traces) over two sessions
+    - :large_orange_diamond: f. Show the tuning curves ordered for one session and the another. Shoudl generalised to all the recordings of an animal+fov together
     - :white_large_square: a.
     - :white_large_square: b.
     - :white_large_square: c. 
@@ -29,6 +35,7 @@ Use prepare_data.ipynb to use the files available from Ann's recording:
     - :white_large_square: c.
     - :white_large_square: d.
 
+## Other files
 - `fig3.ipynb`: control plots. Show the consistency of the model.
     - :white_large_square: a. Predict firing rates across session given the aligned manifold.
     - :white_large_square: b. 
