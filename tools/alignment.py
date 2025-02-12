@@ -92,7 +92,6 @@ def canoncorr(X:np.array, Y: np.array, fullReturn: bool = False) -> np.array:
 
     return newA, newB, r, U, V
 
-
 def procrustes(X, Y, scaling=True, reflection='best'):
     """
     A port of MATLAB's `procrustes` function to Numpy.

@@ -109,8 +109,12 @@ def get_rois_to_exclude(animal, fov, experiment, run):
 
 # Add information on movement status, angular speed and global time
 
-def add_movements_to_csv(animal, fov, experiment, run):
-    """Add the 'movement_status' and 'angular_speed' columns to the dataframe. Add also the golbal time."""
+def add_movements_to_csv(animal, fov, experiment, run, moving_threshold=20):
+    """Add the 'movement_status' and 'angular_speed' columns to the dataframe. Add also the golbal time.
+    INPUTS:
+    - animal, fov, experiment, run: strings
+    - moving_threshold: float, cm/s
+    """
     window = 10 # number of points to average the angular speed
     moving_threshold = 20 #cm/s
     tollerance_time = 0.1 # (seconds) the time the animal can be stationary before it is considered stationary (and viceversa)
