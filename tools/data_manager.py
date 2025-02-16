@@ -23,7 +23,6 @@ def find_path_to_data_folder(animal, fov, experiment, run):
     print('Not path found for: ', animal, fov, experiment, run)
     return None
 
-
 def find_path_to_csv(animal, fov, experiment, run):
     """Given the animal, fov, experiment and run find the path to the data to then load it."""
     res = glob.glob(f'{root_dir}data/**/m*_spikes.csv', recursive=True)
@@ -37,7 +36,6 @@ def find_path_to_csv(animal, fov, experiment, run):
     print('Not path to csv found for: ', animal, fov, experiment, run, type)
     return None
 
-
 def load_csv_data(animal, fov, experiment, run):
     """Load the .csv file I made with all the data from Ann. It can be the spikes or the 'traces'."""
     path_to_csv = find_path_to_csv(animal, fov, experiment, run)
@@ -46,7 +44,6 @@ def load_csv_data(animal, fov, experiment, run):
     except FileNotFoundError: 
         print('File not found: ' + path_to_csv)
     return df
-
 
 def get_all_experiments_runs(animal, fov):
     """
@@ -62,3 +59,16 @@ def get_fovs_given_animal(animal):
     res = glob.glob(f'{root_dir}data/*/{animal}/*', recursive=True)
     fovs = np.unique([res[i].split('/')[-1].split('_')[1] for i in range(len(res))])
     return fovs
+
+# TODO: might delete if Ca traces are not used
+def load_ca_data(animal, fov, experiment, run):
+    """Load the calcium traces data."""
+    # Find the path
+    path = glob.glob(f'{root_dir}data/**/{animal}/{animal}_{fov}_{experiment}-{run}/{animal}_{fov}_{experiment}-{run}_traces.csv', recursive=True)
+    # Load the data
+    try:
+        df = pd.read_csv(path[0])
+    except FileNotFoundError: 
+        print('File not found: ' + path)
+    return df
+

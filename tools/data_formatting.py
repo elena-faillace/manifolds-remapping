@@ -2,9 +2,49 @@
 
 import numpy as np
 from scipy.ndimage import gaussian_filter1d
+from scipy.signal import medfilt
+from scipy.signal import butter, filtfilt
 
-from tools.data_manager import load_csv_data
+from tools.data_manager import load_csv_data, load_ca_data
 
+
+def lowpass_filter(data, cutoff=1, fs=30.9, order=4):
+    nyquist = 0.5 * fs  # Nyquist frequency
+    normal_cutoff = cutoff / nyquist  # Normalized cutoff
+    b, a = butter(order, normal_cutoff, btype='low', analog=False)  # Butterworth filter
+    return filtfilt(b, a, data)  # Apply zero-phase filtering
+
+# TODO: maybe delete this later if calcium traces are not used
+def get_smoothed_moving_ca(animal, fov, experiment, run):
+    """Implement the pre-processing as Ann has suggested for the calcium traces."""
+    # Load the calcium traces
+    ca_df = load_ca_data(animal, fov, experiment, run)
+    # Select only the columns with the traces (they contain a number)
+    neurons_ids = [col for col in ca_df.columns if col.isdigit()]
+    ca = ca_df[neurons_ids].values
+    # Get baseline value and remove it
+    threshold = np.percentile(ca, 35)
+    ca = ca - threshold
+    # Smooth the traces but using a median filter with window of 7
+    ca = medfilt(ca, (7, 1))
+    # Lowpass filter
+    ca = lowpass_filter(ca, cutoff=1, fs=30.9)
+
+    # Load the spikes to get the moving information
+    spikes_df = load_csv_data(animal, fov, experiment, run)
+    time = ca_df['time'].values
+    phi = ca_df['phi'].values
+    moving_masks = spikes_df['movement_status'].values=='moving'
+    cells = ca_df.columns[ca_df.columns.str.contains(r'^\d', regex=True)]
+    
+    # TODO: should control for NaN
+    if np.isnan(ca).any().sum() > 0:
+        print("Warning: Some calcium traces are NaN")
+    # Remove the stationary points
+    ca = ca[moving_masks,:]
+    time = time[moving_masks]
+    phi = phi[moving_masks]
+    return ca, time, phi, cells
 
 def get_smoothed_moving_spikes(animal, fov, experiment, run, bins_compress=3, sigma_smoothing=3, portion_to_remove=0.0):
     """Function that pre-process the spikes from the experiments such that they are ready for further analysis. 
