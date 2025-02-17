@@ -53,6 +53,11 @@ def combine_files_to_csv(animal, fov, experiment, run):
     # Combine the dataframes
     df_events = pd.concat([beh_df, events], axis=1)
 
+    # The following adjustments are made based on individual recordings that I found out having a problem
+    if (animal == 'm66') and (fov == 'fov1') and (experiment == 'fam1fam2') and (run == 'fam1'):
+        max_lenght = len(time)
+        df_events = df_events.iloc[:max_lenght,:]
+
     # Save the dataframe
     path_to_csv = path_to_data + animal + '_' + fov + '_' + experiment + '-' + run
     df_events.to_csv(path_to_csv+'_spikes.csv', index=False)

@@ -3,16 +3,17 @@
 import numpy as np
 from scipy.ndimage import gaussian_filter1d
 from scipy.signal import medfilt
-from scipy.signal import butter, filtfilt
+from scipy.signal import butter, lfilter
 
 from tools.data_manager import load_csv_data, load_ca_data
 
 
 def lowpass_filter(data, cutoff=1, fs=30.9, order=4):
+    """Apply a lowpass filter to the data (features x timepoints)."""
     nyquist = 0.5 * fs  # Nyquist frequency
     normal_cutoff = cutoff / nyquist  # Normalized cutoff
     b, a = butter(order, normal_cutoff, btype='low', analog=False)  # Butterworth filter
-    return filtfilt(b, a, data)  # Apply zero-phase filtering
+    return lfilter(b, a, data)  # Apply zero-phase filtering
 
 # TODO: maybe delete this later if calcium traces are not used
 def get_smoothed_moving_ca(animal, fov, experiment, run):
@@ -28,7 +29,7 @@ def get_smoothed_moving_ca(animal, fov, experiment, run):
     # Smooth the traces but using a median filter with window of 7
     ca = medfilt(ca, (7, 1))
     # Lowpass filter
-    ca = lowpass_filter(ca, cutoff=1, fs=30.9)
+    ca = lowpass_filter(ca.T, cutoff=1, fs=30.9).T
 
     # Load the spikes to get the moving information
     spikes_df = load_csv_data(animal, fov, experiment, run)
