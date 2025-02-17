@@ -51,3 +51,6 @@ def get_colors_for_each_experiment(sessions):
 # List of animals
 animals = ['m62', 'm66', 'm70', 'm116', 'm117',
            'm120', 'm127', 'm129', 'm130', 'm134', 'm135']
+
+# List of experiments to exclude
+experiments_to_exclude = [('m66', 'fov1', 'fam1fam2', 'fam1')]
