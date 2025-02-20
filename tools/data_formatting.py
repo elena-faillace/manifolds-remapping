@@ -45,7 +45,18 @@ def get_smoothed_moving_ca(animal, fov, experiment, run):
     ca = ca[moving_masks,:]
     time = time[moving_masks]
     phi = phi[moving_masks]
-    return ca, time, phi, cells
+
+    # Unwrap the time
+    tdiff = np.diff(time)
+    time_unwrapped = np.zeros(len(time))
+    time_unwrapped[0] = time[0]
+    for i in range(1, len(time_unwrapped)):
+        if tdiff[i-1] > 0:
+            time_unwrapped[i] = time_unwrapped[i-1] + tdiff[i-1]
+        else:
+            time_unwrapped[i] = time_unwrapped[i-1] + time[i]
+
+    return ca, time_unwrapped, phi, cells
 
 def get_smoothed_moving_spikes(animal, fov, experiment, run, bins_compress=3, sigma_smoothing=3, portion_to_remove=0.0):
     """Function that pre-process the spikes from the experiments such that they are ready for further analysis. 
