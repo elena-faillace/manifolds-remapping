@@ -32,7 +32,7 @@ def combine_files_to_csv(animal, fov, experiment, run):
     time = beh_file['time'].flatten()
     # Extract the data of spikes
     events = spikes_file['spikes']
-    cell_ids = np.arange(events.shape[0])
+    cell_ids = np.arange(events.shape[0])+1
 
     # Make a pandas dataframe with the data of the spikes
     events = pd.DataFrame(events.T, columns=[str(cell_id) for cell_id in cell_ids])
@@ -106,7 +106,7 @@ def get_rois_to_exclude(animal, fov, experiment, run):
             try:
                 rois = file.split(',')[-1]
                 # int(r)-1 because the indexes start at 1 in matlab
-                rois_list = [int(r)-1 for r in rois.split('[')[1].split(']')[0].split(' ')]
+                rois_list = [int(r) for r in rois.split('[')[1].split(']')[0].split(' ')]
             except:
                 pass
     return rois_list
