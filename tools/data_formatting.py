@@ -133,6 +133,9 @@ def get_firing_rates(events, sigma):
     frates = gaussian_filter1d(events, sigma=sigma, axis=1)
     return frates
 
+#####################################################
+### This is the function I call most of the times ###
+#####################################################
 def get_smoothed_moving_all_data(animal, fov, experiment, run, n_points=360, portion_to_remove=0.0):
     """Load the data that has been binned and smoothed.
     INPUTS:
@@ -204,31 +207,6 @@ def get_tuning_curves(firing_rates, phi, n_points):
                     ring_neural[b, :] = (ring_neural[b-1, :] + ring_neural[b+1, :])/2
 
     return ring_neural, points_phi
-
-# TODO: delete this
-def get_common_indexes_2recordings(cells_run1, cells_run2):
-    """
-    Given two lists with the cells indexes find a common order.
-    Return the cells in common and the order they need to be selected. 
-    First remove the not common cells and then order them.
-    TODO: should generalise to more than 2 recordings.
-    OUTPUTS:
-    - sel_cells_run1: bool array for the cells in run1 to keep
-    - sel_cells_run2: bool array for the cells in run2 to keep
-    - ordered_cells_run1: ordered indexes for run1
-    - ordered_cells_run2: ordered indexes for run2
-    """
-    # Select only common cells
-    common_cells = np.intersect1d(cells_run1, cells_run2)
-    c_cells_run1_mask = np.isin(cells_run1, common_cells)
-    c_cells_run2_mask = np.isin(cells_run2, common_cells)
-    c_cells_run1 = cells_run1[c_cells_run1_mask]
-    c_cells_run2 = cells_run2[c_cells_run2_mask]
-    # Order the cells
-    ordered_cells_run1 = np.argsort([int(c) for c in c_cells_run1])
-    ordered_cells_run2 = np.argsort([int(c) for c in c_cells_run2])
-
-    return c_cells_run1_mask, c_cells_run2_mask, ordered_cells_run1, ordered_cells_run2
 
 def get_common_indexes_n_recordings(cells_list):
     """

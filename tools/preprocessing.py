@@ -230,4 +230,3 @@ def apply_tollerance_window(status_list, tollerated_bins):
 def count_consecutive_elements(arr):
     """Using groupby to group consecutive identical elements and count them"""
     return [sum(1 for _ in group) for key, group in groupby(arr)]
-
