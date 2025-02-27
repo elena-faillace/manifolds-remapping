@@ -223,7 +223,7 @@ def get_common_indexes_n_recordings(cells_list):
     ordered_cells_list = []
     for cells in cells_list:
         c_cells_mask = np.isin(cells, common_cells)
-        c_cells = cells[c_cells_mask]
+        c_cells = np.array(cells)[c_cells_mask]
         # Order the cells
         ordered_cells = np.argsort([int(c) for c in c_cells])
         sel_cells_list.append(c_cells_mask)
