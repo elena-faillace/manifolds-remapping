@@ -4,8 +4,9 @@ import numpy as np
 from scipy.ndimage import gaussian_filter1d
 from scipy.signal import medfilt
 from scipy.signal import butter, lfilter
+import pandas as pd
 
-from tools.data_manager import load_csv_data, load_ca_data
+from tools.data_manager import load_csv_data, load_ca_data, find_path_to_data_folder
 
 
 def lowpass_filter(data, cutoff=1, fs=30.9, order=4):
@@ -247,3 +248,21 @@ def smooth_tuning_curves_circularly(tuning_curves, kernel_size):
         padded_array = np.pad(tuning_curves[:, i], pad_width=((pad_width,),), mode='wrap')
         smoothed_tuning_curves.append(np.convolve(padded_array, kernel, mode='valid')[:len(tuning_curves[:,i])])
     return np.array(smoothed_tuning_curves).T
+
+def from_local_to_global_index(animal, fov, session, local_indexes):
+    """Take the daily index of the cells and return the global index across days.
+    INPUTS:
+    - animal, fov, session: strings to identify the recording
+    - local_indexes: list of strings with the local indexes of the cells
+    OUTPUT:
+    - global_indexes: list of strings with the global indexes of the cells
+    """
+    path = find_path_to_data_folder(animal)
+    df_matching = pd.read_csv(f'{path}/{animal}_{fov}_global_index_ref.csv')
+    experiment, _ = session
+    global_indexes = []
+    for li in local_indexes:
+        # Select the row with the local index to find the global one
+        row_idx = np.where(df_matching[experiment] == int(li))[0][0]
+        global_indexes.append(str(df_matching.loc[row_idx, 'global_index']))
+    return global_indexes

@@ -87,3 +87,4 @@ def load_global_index(animal, fov):
     except FileNotFoundError: 
         print('File not found: ' + path)
     return df
+
