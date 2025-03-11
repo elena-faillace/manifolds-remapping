@@ -223,13 +223,46 @@ def get_common_indexes_n_recordings(cells_list):
     sel_cells_list = []
     ordered_cells_list = []
     for cells in cells_list:
+        # Get mask of cells that are also in common cells
         c_cells_mask = np.isin(cells, common_cells)
+        # Select the cells that are in common
         c_cells = np.array(cells)[c_cells_mask]
-        # Order the cells
+        # Find the order of the cells if selected considered as integers
         ordered_cells = np.argsort([int(c) for c in c_cells])
         sel_cells_list.append(c_cells_mask)
         ordered_cells_list.append(ordered_cells)
-    return sel_cells_list, ordered_cells_list
+    # Order the common cells (now as integers)
+    common_cells = np.sort([int(c) for c in common_cells])
+    return sel_cells_list, ordered_cells_list, common_cells
+
+# def get_common_indexes_n_recordings(cells_list):
+#     """
+#     Given a list of list of cell indexes, find a common order.
+#     Returns:
+#     - sel_cells_list: list of boolean arrays indicating which cells to keep
+#     - ordered_cells_list: list of ordered indices corresponding to common cells
+#     - common_cells: sorted list of common cells
+#     """
+#     # Find common cells
+#     common_cells = sorted(set(cells_list[0]).intersection(*cells_list[1:]))  # Ensure consistent ordering
+
+#     sel_cells_list = []
+#     ordered_cells_list = []
+
+#     for cells in cells_list:
+#         # Find intersection while maintaining order in 'cells'
+#         c_cells = np.intersect1d(cells, common_cells, assume_unique=True)
+        
+#         # Boolean mask for selection
+#         sel_cells_mask = np.isin(cells, common_cells)
+        
+#         # Find order indices based on common_cells
+#         ordered_cells = np.array([common_cells.index(c) for c in c_cells])
+
+#         sel_cells_list.append(sel_cells_mask)
+#         ordered_cells_list.append(ordered_cells)
+
+#     return sel_cells_list, ordered_cells_list, common_cells
 
 def smooth_tuning_curves_circularly(tuning_curves, kernel_size):
     """

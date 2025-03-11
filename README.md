@@ -26,7 +26,7 @@ Use prepare_data.ipynb to use the files available from Ann's recording:
 - `fig2.ipynb`: plots with main results, presentation of the model and usage to decode position across sessions.
     - :white_check_mark: a. Given an animal+fov I plotted the tuning curves embedding pre and post alignment (taking only the common neurons)
         - TODO: need to update the analysis with registred neurons across days. Could make multiple plots for within day aligment and across days
-    - :white_large_square: b. 
+    - :white_large_square: b. Show tuning curves before and after alignment
     - :white_large_square: c.
     - :white_large_square: d.
 
