@@ -6,8 +6,8 @@ import glob
 import numpy as np
 import pandas as pd
 
-import global_vars
-root_dir = global_vars.root_dir
+import params
+root_dir = params.root_dir
 
 
 def find_path_to_data_folder(animal, fov=None, experiment=None, run=None):
