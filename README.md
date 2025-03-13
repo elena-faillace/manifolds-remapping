@@ -34,5 +34,5 @@ Use prepare_data.ipynb to use the files available from Ann's recording:
 
 - `tools/` contains functions to support the code for the figures
 - `env.yml` all details of the python environment
-- `global_vars.py` contains variable shared across all the project
+- `params.py` contains variable shared across all the project
 - `see_all_info_recordings.ipynb` notebook used to visualise all the information (neural+behavioural) of a given recording.
