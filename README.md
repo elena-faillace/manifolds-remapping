@@ -15,7 +15,7 @@ Use prepare_data.ipynb to use the files available from Ann's recording:
 
 ## Figures
 
-- `fig1.ipynb`: plots regarding the experiment setup and the presentation of the problem of *remapping*.
+- `fig1`: plots regarding the experiment setup and the presentation of the problem of *remapping*.
     - :white_large_square: a. schematic of microscope and environment's setup
     - :white_large_square: b. Schematic of how two environments are different + summary of experiments structure (training + recordings)
     - :white_large_square: c. Slice of HP to shoe the aread targetd + calcium traces example
@@ -23,12 +23,15 @@ Use prepare_data.ipynb to use the files available from Ann's recording:
     - :white_large_square: e. Example of cells remapping (events over traces) over two sessions
     - :large_orange_diamond: f. Show the tuning curves ordered for one session and the another. Should generalised to all the recordings of an animal+fov together
 
-- `fig2.ipynb`: plots with main results, presentation of the model and usage to decode position across sessions.
+- `fig2`: plots with main results, presentation of the model and usage to decode position across sessions.
     - :white_check_mark: a. Given an animal+fov I plotted the tuning curves embedding pre and post alignment (taking only the common neurons)
         - TODO: need to update the analysis with registred neurons across days. Could make multiple plots for within day aligment and across days
-    - :white_check_mark: b. Show tuning curves before and after alignment. Specifically, shows the tuning curves without alignment of all the common neurons. Then shows the activity of all sessions projected on the neural space of the reference session (all neurons of reference session)
-    - :large_orange_diamond: c. Show how well tuning curves 'predicted' correlate with the real tuning curves. Show while keeping out the neurons from the alignment. 
-    - :white_large_square: d.
+    - :white_check_mark: b. Show tuning curves before and after alignment. Specifically, shows the tuning curves without alignment (for all  common neurons); then shows the activity of all sessions projected on the neural space of the reference session (all neurons of reference session).
+    - :white_check_mark: c. Show how well tuning curves from the reference session 'predict' the real tuning curves of all the other sessions (using only common neurons). Specifically, look at the correlation, the cosine similarity and the R2. 
+    - :large_orange_diamond: d. Show how the model applied to the firing rates can predict the position of the animal across all sessions. 
+
+- `fig3`: plots that show the robustness of the model.
+    - :white_large_square: a. Show by keeping out a neuron how its actvity is stll recovered by its relationship to the manifold. 
 
 ## Other files
 
