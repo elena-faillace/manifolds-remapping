@@ -56,7 +56,7 @@ Use prepare_data.ipynb to use the files available from Ann's recording:
 ![Figure 2c part 1](https://github.com/elena-faillace/manifolds-remapping/blob/main/figures/fig2/plots/PNGs/fig2c_1.png)
 ![Figure 2c part 2](https://github.com/elena-faillace/manifolds-remapping/blob/main/figures/fig2/plots/PNGs/fig2c_2.png)
 
-#### Gifure 2d:
+#### Figure 2d:
 ![Figure 2d part 1](https://github.com/elena-faillace/manifolds-remapping/blob/main/figures/fig2/plots/PNGs/fig2d_1.png)
 ![Figure 2d part 2](https://github.com/elena-faillace/manifolds-remapping/blob/main/figures/fig2/plots/PNGs/fig2d_2.png)
 
