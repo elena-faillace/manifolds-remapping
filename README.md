@@ -39,3 +39,7 @@ Use prepare_data.ipynb to use the files available from Ann's recording:
 - `env.yml` all details of the python environment
 - `params.py` contains variable shared across all the project
 - `see_all_info_recordings.ipynb` notebook used to visualise all the information (neural+behavioural) of a given recording.
+
+## Figures plotted so far
+![Figure 2a part 1](https://github.com/elena-faillace/manifolds-remapping/blob/main/figures/fig2/plots/fig2a_1.pdf)
+
