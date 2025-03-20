@@ -44,6 +44,7 @@ colors_each_experiment = {('fam1fam2','fam1'): '#e85d04',
                           ('fam1fam1rev', 'fam1rev'): '#d727fc',
                           ('fam1fam1revfam1', 'fam1rev'): '#d727fc',
                           ('fam1fam1revfam1', 'fam1r2'): '#fd23de'}
+
 def get_colors_for_each_experiment(sessions):
     """Given a list of tuples (experiments-runs) returns a list of colors."""
     return [colors_each_experiment[session] for session in sessions]
@@ -54,3 +55,9 @@ animals = ['m62', 'm66', 'm70', 'm116', 'm117',
 
 # List of experiments to exclude
 experiments_to_exclude = [('m66', 'fov1', 'fam1fam2', 'fam1')]
+
+# Colors for plotting different results
+results_colors = {
+    'MDA': '#14ddac',
+    'CMSE': '#06dcd5'
+}
