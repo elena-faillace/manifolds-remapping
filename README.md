@@ -41,5 +41,7 @@ Use prepare_data.ipynb to use the files available from Ann's recording:
 - `see_all_info_recordings.ipynb` notebook used to visualise all the information (neural+behavioural) of a given recording.
 
 ## Figures plotted so far
-![Figure 2a part 1](https://github.com/elena-faillace/manifolds-remapping/blob/main/figures/fig2/plots/fig2a_1.pdf)
+![Figure 2a part 1](https://github.com/elena-faillace/manifolds-remapping/blob/main/figures/fig2/plots/PNGs/fig2a_1.png)
+![Figure 2a part 2](https://github.com/elena-faillace/manifolds-remapping/blob/main/figures/fig2/plots/PNGs/fig2a_2.png)
+![Figure 2a part 3](https://github.com/elena-faillace/manifolds-remapping/blob/main/figures/fig2/plots/PNGs/fig2a_3.png)
 
