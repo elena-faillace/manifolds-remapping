@@ -41,7 +41,22 @@ Use prepare_data.ipynb to use the files available from Ann's recording:
 - `see_all_info_recordings.ipynb` notebook used to visualise all the information (neural+behavioural) of a given recording.
 
 ## Figures plotted so far
+
+### Figure 2
+#### Figure 2a:
 ![Figure 2a part 1](https://github.com/elena-faillace/manifolds-remapping/blob/main/figures/fig2/plots/PNGs/fig2a_1.png)
 ![Figure 2a part 2](https://github.com/elena-faillace/manifolds-remapping/blob/main/figures/fig2/plots/PNGs/fig2a_2.png)
 ![Figure 2a part 3](https://github.com/elena-faillace/manifolds-remapping/blob/main/figures/fig2/plots/PNGs/fig2a_3.png)
+
+#### Figure 2b:
+![Figure 2b part 1](https://github.com/elena-faillace/manifolds-remapping/blob/main/figures/fig2/plots/PNGs/fig2b_1.png)
+![Figure 2b part 2](https://github.com/elena-faillace/manifolds-remapping/blob/main/figures/fig2/plots/PNGs/fig2b_2.png)
+
+#### Figure 2c:
+![Figure 2c part 1](https://github.com/elena-faillace/manifolds-remapping/blob/main/figures/fig2/plots/PNGs/fig2c_1.png)
+![Figure 2c part 2](https://github.com/elena-faillace/manifolds-remapping/blob/main/figures/fig2/plots/PNGs/fig2c_2.png)
+
+#### Gifure 2d:
+![Figure 2d part 1](https://github.com/elena-faillace/manifolds-remapping/blob/main/figures/fig2/plots/PNGs/fig2d_1.png)
+![Figure 2d part 2](https://github.com/elena-faillace/manifolds-remapping/blob/main/figures/fig2/plots/PNGs/fig2d_2.png)
 
