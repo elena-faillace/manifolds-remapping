@@ -32,7 +32,9 @@ Use prepare_data.ipynb to use the files available from Ann's recording:
 
 - `fig3`: plots that show the robustness of the model.
     - :white_check_mark: a. Show by keeping out a neuron how its actvity is stll recovered by its relationship to the manifold. Plotted the correlation, cosine similarity and L2 distance between a tuning curve predicted by including it in the alignment or not.
-    - :large_orange_diamond: b. 
+    - :large_orange_diamond: b. Remove Place Cells when aligning and check how well the tuning curves can be predicted (or how well the decoder performs).
+    - :white_large_square: c.
+    - :white_large_square: d.
 
 ## Other files
 
