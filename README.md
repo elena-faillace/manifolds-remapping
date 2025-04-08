@@ -31,7 +31,8 @@ Use prepare_data.ipynb to use the files available from Ann's recording:
     - :white_check_mark: d. Show how the model applied to the firing rates can predict the position of the animal across all sessions. 
 
 - `fig3`: plots that show the robustness of the model.
-    - :large_orange_diamond: a. Show by keeping out a neuron how its actvity is stll recovered by its relationship to the manifold. 
+    - :white_check_mark: a. Show by keeping out a neuron how its actvity is stll recovered by its relationship to the manifold. Plotted the correlation, cosine similarity and L2 distance between a tuning curve predicted by including it in the alignment or not.
+    - :large_orange_diamond: b. 
 
 ## Other files
 
@@ -60,3 +61,7 @@ Use prepare_data.ipynb to use the files available from Ann's recording:
 ![Figure 2d part 1](https://github.com/elena-faillace/manifolds-remapping/blob/main/figures/fig2/plots/PNGs/fig2d_1.png)
 ![Figure 2d part 2](https://github.com/elena-faillace/manifolds-remapping/blob/main/figures/fig2/plots/PNGs/fig2d_2.png)
 
+### Figure 3
+#### Figure 3a:
+![Figure 2a part 1](https://github.com/elena-faillace/manifolds-remapping/blob/main/figures/fig3/plots/PNGs/fig2a_1.png)
+![Figure 2a part 2](https://github.com/elena-faillace/manifolds-remapping/blob/main/figures/fig3/plots/PNGs/fig2a_2.png)
