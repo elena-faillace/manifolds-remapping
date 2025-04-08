@@ -271,3 +271,4 @@ def from_local_to_global_index(animal, fov, session, local_indexes):
         row_idx = np.where(df_matching[experiment] == int(li))[0][0]
         global_indexes.append(str(df_matching.loc[row_idx, 'global_index']))
     return global_indexes
+
