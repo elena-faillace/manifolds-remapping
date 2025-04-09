@@ -25,7 +25,6 @@ Use prepare_data.ipynb to use the files available from Ann's recording:
 
 - `fig2`: plots with main results, presentation of the model and usage to decode position across sessions.
     - :white_check_mark: a. Given an animal+fov I plotted the tuning curves embedding pre and post alignment (taking only the common neurons)
-        - TODO: need to update the analysis with registred neurons across days. Could make multiple plots for within day aligment and across days
     - :white_check_mark: b. Show tuning curves before and after alignment. Specifically, shows the tuning curves without alignment (for all  common neurons); then shows the activity of all sessions projected on the neural space of the reference session (all neurons of reference session).
     - :white_check_mark: c. Show how well tuning curves from the reference session 'predict' the real tuning curves of all the other sessions (using only common neurons). Specifically, look at the correlation, the cosine similarity and the R2. 
     - :white_check_mark: d. Show how the model applied to the firing rates can predict the position of the animal across all sessions. 

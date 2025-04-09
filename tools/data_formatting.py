@@ -6,7 +6,7 @@ from scipy.signal import medfilt
 from scipy.signal import butter, lfilter
 import pandas as pd
 
-from tools.data_manager import load_csv_data, load_ca_data, find_path_to_data_folder
+from tools.data_manager import load_csv_data, find_path_to_data_folder #, load_ca_data
 
 
 # def lowpass_filter(data, cutoff=1, fs=30.9, order=4):
