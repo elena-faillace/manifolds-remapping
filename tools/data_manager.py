@@ -67,17 +67,17 @@ def get_fovs_given_animal(animal):
     fovs = np.unique([res[i].split('/')[-1].split('_')[1] for i in range(len(res))])
     return fovs
 
-# TODO: might delete if Ca traces are not used
-def load_ca_data(animal, fov, experiment, run):
-    """Load the calcium traces data."""
-    # Find the path
-    path = glob.glob(f'{root_dir}data/**/{animal}/{animal}_{fov}_{experiment}-{run}/{animal}_{fov}_{experiment}-{run}_traces.csv', recursive=True)
-    # Load the data
-    try:
-        df = pd.read_csv(path[0])
-    except FileNotFoundError: 
-        print('File not found: ' + path)
-    return df
+# # TODO: might delete if Ca traces are not used
+# def load_ca_data(animal, fov, experiment, run):
+#     """Load the calcium traces data."""
+#     # Find the path
+#     path = glob.glob(f'{root_dir}data/**/{animal}/{animal}_{fov}_{experiment}-{run}/{animal}_{fov}_{experiment}-{run}_traces.csv', recursive=True)
+#     # Load the data
+#     try:
+#         df = pd.read_csv(path[0])
+#     except FileNotFoundError: 
+#         print('File not found: ' + path)
+#     return df
 
 def load_global_index(animal, fov):
     """Load the global index dataframe."""
