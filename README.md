@@ -69,3 +69,4 @@ Use prepare_data.ipynb to use the files available from Ann's recording:
 
 #### Figure 3b:
 ![Figure 3b part 1](https://github.com/elena-faillace/manifolds-remapping/blob/main/figures/fig3/plots/PNGs/fig3b_1.png)
+![Figure 3b part 2](https://github.com/elena-faillace/manifolds-remapping/blob/main/figures/fig3/plots/PNGs/fig3b_2.png)
