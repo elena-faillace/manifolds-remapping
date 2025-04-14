@@ -6,7 +6,7 @@ from scipy.signal import medfilt
 from scipy.signal import butter, lfilter
 import pandas as pd
 
-from tools.data_manager import load_csv_data, find_path_to_data_folder #, load_ca_data
+from tools.data_manager import load_csv_data, find_path_to_data_folder  # , load_ca_data
 
 
 # def lowpass_filter(data, cutoff=1, fs=30.9, order=4):
@@ -270,26 +270,58 @@ def get_common_indexes_n_recordings(cells_list):
     return sel_cells_list, ordered_cells_list, common_cells
 
 
+# TODO: delet this, if the symetric padding works best
+# def smooth_tuning_curves_circularly(tuning_curves, kernel_size):
+#     """
+#     Given an array of tuning curves smooth them circularly.
+#     Use moving average such that the beginning and ending of the array are connected.
+#     INPUTS:
+#     - tuning_curves: 2D array of shape (n_points, n_neurons)
+#     - smooth_kernel: int with the size of the kernel to smooth
+#     OUTPUTS:
+#     - smoothed_tuning_curves: 2D array of shape (n_points, n_neurons)
+#     """
+#     kernel = np.ones((kernel_size,)) / kernel_size
+#     pad_width = len(kernel) - 1
+#     smoothed_tuning_curves = []
+#     for i in range(tuning_curves.shape[1]):
+#         padded_array = np.pad(
+#             tuning_curves[:, i], pad_width=((pad_width,),), mode="wrap"
+#         )
+#         smoothed_tuning_curves.append(
+#             np.convolve(padded_array, kernel, mode="valid")[: len(tuning_curves[:, i])]
+#         )
+#     return np.array(smoothed_tuning_curves).T
+
+
 def smooth_tuning_curves_circularly(tuning_curves, kernel_size):
     """
     Given an array of tuning curves smooth them circularly.
     Use moving average such that the beginning and ending of the array are connected.
     INPUTS:
     - tuning_curves: 2D array of shape (n_points, n_neurons)
-    - smooth_kernel: int with the size of the kernel to smooth
+    - kernel_size: int with the size of the kernel to smooth
     OUTPUTS:
     - smoothed_tuning_curves: 2D array of shape (n_points, n_neurons)
     """
+    len_tuning_curves = tuning_curves.shape[0]
+    # Create a kernel for smoothing
     kernel = np.ones((kernel_size,)) / kernel_size
-    pad_width = len(kernel) - 1
+    # Pad the tuning curves to handle circular smoothing
+    pad_width = kernel_size // 2  # Half the kernel size for symmetric padding
     smoothed_tuning_curves = []
     for i in range(tuning_curves.shape[1]):
+        # Use wrap mode to pad at both ends
         padded_array = np.pad(
-            tuning_curves[:, i], pad_width=((pad_width,),), mode="wrap"
-        )
-        smoothed_tuning_curves.append(
-            np.convolve(padded_array, kernel, mode="valid")[: len(tuning_curves[:, i])]
-        )
+            tuning_curves[:, i], pad_width=pad_width, mode="wrap"
+            )
+        # Convolve with the kernel and capture valid portion
+        smoothed = np.convolve(padded_array, kernel, mode="valid")
+        smoothed_tuning_curves.append(smoothed)
+    # In case the padding added 1 extra point, trim it
+    if len(smoothed_tuning_curves[0]) == len_tuning_curves+1:
+        # If the length is longer than the original, trim it
+        smoothed_tuning_curves = [curve[:len_tuning_curves] for curve in smoothed_tuning_curves]
     return np.array(smoothed_tuning_curves).T
 
 
