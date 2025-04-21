@@ -54,7 +54,7 @@ animals = ['m62', 'm66', 'm70', 'm116', 'm117',
            'm120', 'm127', 'm129', 'm130', 'm134', 'm135']
 
 # List of experiments to exclude
-experiments_to_exclude = [('m66', 'fov1', 'fam1fam2', 'fam1')]
+experiments_to_exclude = [('m66', 'fov1', 'fam1fam2', 'fam1'), ('m117', 'fov2', 'fam1fam2', 'fam1'), ('m117', 'fov2', 'fam1fam2', 'fam2')]
 
 # Colors for plotting different results
 results_colors = {

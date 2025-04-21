@@ -48,6 +48,7 @@ def load_csv_data(animal, fov, experiment, run):
         df = pd.read_csv(path_to_csv)
     except FileNotFoundError: 
         print('File not found: ' + path_to_csv)
+        return None
     return df
 
 def get_all_experiments_runs(animal, fov):
@@ -65,6 +66,8 @@ def get_fovs_given_animal(animal):
     """Get the fovs for a given animal."""
     res = glob.glob(f'{root_dir}data/*/{animal}/*', recursive=True)
     fovs = np.unique([res[i].split('/')[-1].split('_')[1] for i in range(len(res))])
+    if 'matched' in fovs:
+        fovs = np.delete(fovs, np.where(fovs == 'matched')[0])
     return fovs
 
 # # TODO: might delete if Ca traces are not used
