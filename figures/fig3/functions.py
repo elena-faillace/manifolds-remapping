@@ -55,7 +55,7 @@ def get_predicted_tuning_curves_one_out(all_tuning_curves, all_cells, sessions):
     predicted_tuning_curves_one_out = []
     reference_tuning_curves_one_out = []
     pca = PCA(n_components=20)
-    for i in range(len(sessions) - 1):
+    for i in range(len(sessions)-1):
         # Get the session to align to
         tuning_curves = smoothed_tuning_curves[i + 1]
 
