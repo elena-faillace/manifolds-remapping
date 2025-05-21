@@ -6,10 +6,10 @@ import numpy as np
 import pandas as pd
 from itertools import groupby
 
-import global_vars
+import params
 
-path_to_rois = global_vars.path_to_rois
-sampling_freq = global_vars.sampling_freq
+path_to_rois = params.path_to_rois
+sampling_freq = params.sampling_freq
 
 from tools.data_manager import find_path_to_data_folder, find_path_to_csv, load_csv_data
 

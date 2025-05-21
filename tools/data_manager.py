@@ -39,6 +39,7 @@ def find_path_to_csv(animal, fov, experiment, run):
         if (animal==animal_path) and (fov==fov_path) and (experiment==experiment_path) and (run==run_path):
             return path
     print('Not path to csv found for: ', animal, fov, experiment, run, type)
+    [print(path) for path in res]
     return None
 
 def load_csv_data(animal, fov, experiment, run):
