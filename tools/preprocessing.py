@@ -1,6 +1,7 @@
 """This script contains functions to preprocess the data before the analysis."""
 
 import os
+from sys import exception
 from scipy.io import loadmat
 import numpy as np
 import pandas as pd
@@ -137,8 +138,22 @@ def get_rois_to_exclude(animal, fov, experiment, run):
                 rois_list = [
                     int(r) for r in rois.split("[")[1].split("]")[0].split(" ")
                 ]
-            except:
-                pass
+            except exception as e:
+                print(
+                    "No ROIs to exclude for: " + animal + "_" + fov + "_" + experiment + "-" + run
+                )
+                print(e)
+        else:
+            print(
+                "No ROIs to exclude for: "
+                + animal
+                + "_"
+                + fov
+                + "_"
+                + experiment
+                + "-"
+                + run
+            )
     return rois_list
 
 
