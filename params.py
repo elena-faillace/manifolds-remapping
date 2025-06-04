@@ -59,19 +59,26 @@ def get_colors_for_each_experiment(sessions):
     return [colors_each_experiment[session] for session in sessions]
 
 
-# List of animals
-animals = [
-    "m62",
-    "m66",
-    "m70",
-    "m116",
-    "m117",
-    "m120",
-    "m127",
-    "m129",
-    "m130",
-    "m134",
-    "m135",
+# List of animals_fov with the corresponding experiments
+animals = {
+    "m62_fov2": ["fam1fam2", "fam1nov", "fam1fam1rev"],
+    "m66_fov1": ["fam1fam2", "fam1nov"],
+    "m70_fov1": ["fam1fam2", "fam1nov", "fam1fam1rev"],
+    "m116_fov1": ["fam1fam2fam1", "fam1novfam1", "fam1fam1revfam1"],
+    "m117_fov1": ["fam1fam2", "fam1nov"],
+    "m120_fov1": ["fam1fam2", "fam1novfam1", "fam1fam1rev"],
+    "m120_fov2": ["fam1fam2", "fam1novfam1", "fam1fam1rev"],
+    "m120_fov2s2": ["fam1fam2s2", "fam1novfam1", "fam1fam1rev"],
+    "m127_fov1": ["fam1fam2fam1", "fam1novfam1", "fam1fam1revfam1"],
+    "m127_fov2": ["fam1fam2fam1", "fam1novfam1", "fam1fam1revfam1"],
+    "m129_fov1": ["fam1fam2fam1", "fam1novfam1", "fam1fam1revfam1"],
+    "m129_fov2": ["fam1fam2fam1", "fam1novfam1", "fam1fam1revfam1"],
+    "m130_fov1": ["fam1fam2fam1", "fam1novfam1", "fam1fam1revfam1"],
+    "m130_fov2": ["fam1fam2fam1", "fam1novfam1", "fam1fam1revfam1"],
+    "m134_fov1": ["fam1fam2fam1", "fam1novfam1", "fam1fam1revfam1"],
+    "m134_fov2": ["fam1fam2fam1"],
+    "m135_fov1": ["fam1fam2fam1", "fam1novfam1", "fam1fam1revfam1"],
+    "m135_fov2": ["fam1fam2fam1", "fam1novfam1", "fam1fam1revfam1"],
     # "m111",
     # "m118",
     # "m125",
@@ -83,7 +90,7 @@ animals = [
     # "m121",
     # "m128",
     # "m132",
-]
+}
 
 # List of experiments to exclude
 experiments_to_exclude = [

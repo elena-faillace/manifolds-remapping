@@ -121,6 +121,7 @@ def remove_rois_to_exclude(animal, fov, experiment, run):
 
 def get_rois_to_exclude(animal, fov, experiment, run):
     """Load the .txt with the info of all the files and the ROIs to exclude, return a list of the ROIs."""
+    fov = fov[:4]
     rois_list = []
     txt = open(path_to_rois, "r").readlines()
     for file in txt:
@@ -132,29 +133,16 @@ def get_rois_to_exclude(animal, fov, experiment, run):
             file.split(",")[0]
             == "list_" + animal + "_" + experiment + "-" + run + ".txt"
         ):
-            try:
-                rois = file.split(",")[-1]
-                # int(r)-1 because the indexes start at 1 in matlab
+            rois = file.split(",")[-1]
+            # If the last element is true then there are no ROIs to exclude
+            if 'true' in rois:
+                return []
+            else:
                 rois_list = [
                     int(r) for r in rois.split("[")[1].split("]")[0].split(" ")
                 ]
-            except exception as e:
-                print(
-                    "No ROIs to exclude for: " + animal + "_" + fov + "_" + experiment + "-" + run
-                )
-                print(e)
-        else:
-            print(
-                "No ROIs to exclude for: "
-                + animal
-                + "_"
-                + fov
-                + "_"
-                + experiment
-                + "-"
-                + run
-            )
-    return rois_list
+            return rois_list
+    print("Error: no line of file found for: ", animal, fov, experiment, run)
 
 
 # Add information on movement status, angular speed and global time
