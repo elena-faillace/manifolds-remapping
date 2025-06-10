@@ -46,6 +46,16 @@ def combine_files_to_csv(animal, fov, experiment, run):
     events = spikes_file["spikes"]
     cell_ids = np.arange(events.shape[0]) + 1
 
+    # --- Standardize amplitudes so mean of nonzero amplitudes is 1 ---
+    # Combine all activity for all cells in the FOV
+    C = events.flatten()
+    C_nonzero = C[C > 0]
+    if len(C_nonzero) > 0:
+        mu_log = np.mean(np.log(C_nonzero))
+        k_rescale = np.exp(1 - mu_log)
+        events = events * k_rescale
+    # --- end standardization ---
+
     # Make a pandas dataframe with the data of the spikes
     events = pd.DataFrame(events.T, columns=[str(cell_id) for cell_id in cell_ids])
 
@@ -111,9 +121,10 @@ def remove_rois_to_exclude(animal, fov, experiment, run):
     rois_to_exclude = get_rois_to_exclude(animal, fov, experiment, run)
     # Load the dataframe
     df_spikes = load_csv_data(animal, fov, experiment, run)
-    # Remove the ROIs
-    rois_to_exclude = [str(r) for r in rois_to_exclude]
-    df_spikes = df_spikes.drop(columns=rois_to_exclude)
+    if len(rois_to_exclude) > 0:
+        # Remove the ROIs
+        rois_to_exclude = [str(r) for r in rois_to_exclude]
+        df_spikes = df_spikes.drop(columns=rois_to_exclude)
     # Save the dataframe
     df_spikes.to_csv(path_to_csv_spikes, index=False)
     print("\tROIs: " + str(rois_to_exclude) + ", excluded from: ", name)
@@ -124,6 +135,7 @@ def get_rois_to_exclude(animal, fov, experiment, run):
     fov = fov[:4]
     rois_list = []
     txt = open(path_to_rois, "r").readlines()
+    
     for file in txt:
         # Sometimes the fov is not included in the file name
         if (
@@ -142,7 +154,11 @@ def get_rois_to_exclude(animal, fov, experiment, run):
                     int(r) for r in rois.split("[")[1].split("]")[0].split(" ")
                 ]
             return rois_list
+        
     print("Error: no line of file found for: ", animal, fov, experiment, run)
+    print("list_" + animal + "_" + experiment + "-" + run + ".txt")
+    print("list_" + animal + "_" + fov + "_" + experiment + "-" + run + ".txt")
+
 
 
 # Add information on movement status, angular speed and global time
